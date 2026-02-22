@@ -5,7 +5,7 @@ class Solution {
 
         for(int i =0;i<piles.length;i++)
         {
-            totalTime += piles[i]/mid;
+            totalTime += piles[i]/mid; 
             if(piles[i]%mid !=0){
                 totalTime++ ;
             }
