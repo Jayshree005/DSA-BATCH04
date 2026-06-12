@@ -1,41 +1,53 @@
+import java.util.*;
+
 class Solution {
     public String minWindow(String s, String t) {
-        if (s.length() < t.length()) return "";
-        HashMap<Character, Integer> targetMap = new HashMap<>();
-        for (char c : t.toCharArray()) {
-            targetMap.put(c, targetMap.getOrDefault(c, 0) + 1);
-        }
-
-        HashMap<Character, Integer> windowMap = new HashMap<>();
-        int left = 0, right = 0;
-        int required = targetMap.size(); // Kitne unique characters chahiye
-        int formed = 0; // Abhi tak kitne unique characters required count tak pahunche
         
+        if(s.length() < t.length()) return "";
+        
+        HashMap<Character, Integer> map = new HashMap<>();
+        
+        for(char c : t.toCharArray()){
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        }
+        
+        int left = 0;
+        int count = t.length();
         int minLen = Integer.MAX_VALUE;
-        int startIdx = 0;
-
-        while (right < s.length()) {
+        int start = 0;
+        
+        for(int right = 0; right < s.length(); right++){
+            
             char c = s.charAt(right);
-            windowMap.put(c, windowMap.getOrDefault(c, 0) + 1);
-
-            if (targetMap.containsKey(c) && windowMap.get(c).intValue() == targetMap.get(c).intValue()) {
-                formed++;
+            
+            if(map.containsKey(c)){
+                if(map.get(c) > 0){
+                    count--;
+                }
+                map.put(c, map.get(c) - 1);
             }
-            while (left <= right && formed == required) {
-                char temp = s.charAt(left);
-                if (right - left + 1 < minLen) {
+            
+            while(count == 0){
+                
+                if(right - left + 1 < minLen){
                     minLen = right - left + 1;
-                    startIdx = left;
+                    start = left;
                 }
-                windowMap.put(temp, windowMap.get(temp) - 1);
-                if (targetMap.containsKey(temp) && windowMap.get(temp) < targetMap.get(temp)) {
-                    formed--;
+                
+                char leftChar = s.charAt(left);
+                
+                if(map.containsKey(leftChar)){
+                    map.put(leftChar, map.get(leftChar) + 1);
+                    
+                    if(map.get(leftChar) > 0){
+                        count++;
+                    }
                 }
+                
                 left++;
             }
-            right++;
         }
-
-        return minLen == Integer.MAX_VALUE ? "" : s.substring(startIdx, startIdx + minLen);
+        
+        return minLen == Integer.MAX_VALUE ? "" : s.substring(start, start + minLen);
     }
 }
