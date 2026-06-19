@@ -5,12 +5,12 @@ class Solution {
 
         // Give each child 1 candy initially
         Arrays.fill(candies, 1);
-
+        
         // Left to right
         for (int i = 1; i < n; i++) {
             if (ratings[i] > ratings[i - 1]) {
                 candies[i] = candies[i - 1] + 1;
-            }
+            } 
         }
 
         // Right to left
